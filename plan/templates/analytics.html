@@ -1,0 +1,484 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+@media (max-width: 767.98px) {
+  .card {
+    margin-bottom: 20px;
+  }
+  .chart-card {
+    min-width: 100% !important;
+    padding: 0.5rem !important;
+  }
+  .stat-card {
+    min-width: 100% !important;
+    padding: 0.5rem !important;
+  }
+  .row > [class^='col-'] {
+    margin-bottom: 1rem;
+  }
+}
+</style>
+<div class="container-fluid mt-4">
+    <!-- Page Title -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="page-title">
+                <i class="fas fa-chart-line me-2"></i>Analytics Dashboard
+            </h2>
+        </div>
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="row">
+        <div class="col-12">
+            <div class="row g-3 align-items-stretch">
+                <!-- Total Users Card -->
+                <div class="col-sm-6 col-md-3 h-100">
+                    <div class="card stat-card bg-gradient-primary h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle mb-2">Total Users</h6>
+                                    <h2 class="card-title mb-0">{{ total_users }}</h2>
+                                    <p class="card-text mt-2">
+                                        <span class="badge bg-light text-dark">
+                                            <i class="fas fa-user-check me-1"></i>Active: {{ active_users }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue Card -->
+                <div class="col-sm-6 col-md-3 h-100">
+                    <div class="card stat-card bg-gradient-success h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle mb-2">Total Revenue</h6>
+                                    <h2 class="card-title mb-0">₹{{ total_revenue }}</h2>
+                                    <p class="card-text mt-2">
+                                        <span class="badge bg-light text-dark">
+                                            <i class="fas fa-calendar-alt me-1"></i>This Month: ₹{{ monthly_revenue }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-rupee-sign fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plans Card -->
+                <div class="col-sm-6 col-md-3 h-100">
+                    <div class="card stat-card bg-gradient-info h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle mb-2">Active Plans</h6>
+                                    <h2 class="card-title mb-0">{{ total_plans }}</h2>
+                                    <p class="card-text mt-2">
+                                        <span class="badge bg-light text-dark">
+                                            <i class="fas fa-star me-1"></i>Popular: {{ popular_plan }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-list fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Rate Card -->
+                <div class="col-sm-6 col-md-3 h-100">
+                    <div class="card stat-card bg-gradient-warning h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-subtitle mb-2">Success Rate</h6>
+                                    <h2 class="card-title mb-0">{{ success_rate }}%</h2>
+                                    <p class="card-text mt-2">
+                                        <span class="badge bg-light text-dark">
+                                            <i class="fas fa-check-circle me-1"></i>Payment Success
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-chart-pie fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mt-4">
+        <!-- User Growth Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card chart-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-line me-2"></i>User Growth
+                    </h5>
+                    <div class="chart-actions">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="downloadChart('userGrowthChart')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="userGrowthChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card chart-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-money-bill-wave me-2"></i>Revenue Overview
+                    </h5>
+                    <div class="chart-actions">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="downloadChart('revenueChart')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plan Distribution Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card chart-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-pie-chart me-2"></i>Plan Distribution
+                    </h5>
+                    <div class="chart-actions">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="downloadChart('planDistributionChart')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="planDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Status Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card chart-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-credit-card me-2"></i>Payment Status
+                    </h5>
+                    <div class="chart-actions">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="downloadChart('paymentStatusChart')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="paymentStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<script>
+// Common chart options
+const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            position: 'top',
+            labels: {
+                padding: 20,
+                font: {
+                    size: 12
+                }
+            }
+        },
+        tooltip: {
+            padding: 12,
+            titleFont: {
+                size: 14
+            },
+            bodyFont: {
+                size: 13
+            }
+        }
+    }
+};
+
+// User Growth Chart
+const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+new Chart(userGrowthCtx, {
+    type: 'line',
+    data: {
+        labels: {{ user_growth_labels|safe }},
+        datasets: [{
+            label: 'New Users',
+            data: {{ user_growth_data|safe }},
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        ...commonOptions,
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.1)'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+// Revenue Chart
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+new Chart(revenueCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ revenue_labels|safe }},
+        datasets: [{
+            label: 'Revenue',
+            data: {{ revenue_data|safe }},
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgb(54, 162, 235)',
+            borderWidth: 1,
+            borderRadius: 5
+        }]
+    },
+    options: {
+        ...commonOptions,
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.1)'
+                },
+                ticks: {
+                    callback: function(value) {
+                        return '₹' + value;
+                    }
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+// Plan Distribution Chart
+const planDistributionCtx = document.getElementById('planDistributionChart').getContext('2d');
+new Chart(planDistributionCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ plan_labels|safe }},
+        datasets: [{
+            data: {{ plan_data|safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 206, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(153, 102, 255)',
+                'rgb(255, 159, 64)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        ...commonOptions,
+        cutout: '60%'
+    }
+});
+
+// Payment Status Chart
+const paymentStatusCtx = document.getElementById('paymentStatusChart').getContext('2d');
+new Chart(paymentStatusCtx, {
+    type: 'pie',
+    data: {
+        labels: ['Successful', 'Failed'],
+        datasets: [{
+            data: {{ payment_status_data|safe }},
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(255, 99, 132, 0.7)'
+            ],
+            borderColor: [
+                'rgb(75, 192, 192)',
+                'rgb(255, 99, 132)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        ...commonOptions
+    }
+});
+
+// Function to download charts
+function downloadChart(chartId) {
+    const canvas = document.getElementById(chartId);
+    canvas.toBlob(function(blob) {
+        saveAs(blob, `${chartId}.png`);
+    });
+}
+</script>
+
+<style>
+/* Page Title */
+.page-title {
+    color: #007bff;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Stat Cards */
+.stat-card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+    height: 100%;
+    min-height: 220px;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card .card-body {
+    padding: 1.5rem;
+}
+
+.stat-card .card-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .card-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.stat-icon {
+    opacity: 0.8;
+}
+
+/* Gradient Backgrounds */
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df, #224abe);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(45deg, #1cc88a, #13855c);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(45deg, #36b9cc, #258391);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(45deg, #f6c23e, #dda20a);
+}
+
+/* Chart Cards */
+.chart-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.chart-card .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 1.5rem;
+}
+
+.chart-card .card-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.chart-card .card-body {
+    padding: 1.5rem;
+    height: 350px;
+}
+
+/* Badges */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .stat-card .card-title {
+        font-size: 1.5rem;
+    }
+    
+    .chart-card .card-body {
+        height: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .stat-card .card-title {
+        font-size: 1.25rem;
+    }
+    
+    .chart-card .card-body {
+        height: 250px;
+    }
+}
+</style>
+{% endblock %} 

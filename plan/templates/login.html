@@ -1,0 +1,125 @@
+{% extends "main.html" %}
+
+{% block content %}
+<style>
+    .split-card {
+        background-color: #212529;
+        box-shadow: 10px 8px 8px 5pxrgb(115, 217, 232);
+        border-radius: 15px;
+        overflow: hidden;
+        display: flex;
+        max-width: 900px;
+        margin: 2rem auto;
+    }
+
+    .login-section {
+        flex: 1;
+        padding: 2rem;
+        text-transform: uppercase;
+    }
+
+    .bill-section {
+        flex: 1;
+        padding: 2rem;
+        background: linear-gradient(145deg, #17a2b8, #138496);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+    }
+
+    .form-control {
+        background-color: #343a40;
+        border: 1px solid #17a2b8;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .form-control:focus {
+        background-color: #343a40;
+        border-color: #17a2b8;
+        color: white;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+    }
+
+    .bill-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .bill-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .bill-description {
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .btn-bill {
+        background-color: white;
+        color: #17a2b8;
+        border: none;
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-bill:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        color: #138496;
+    }
+</style>
+
+<div class="container">
+    <div class="split-card">
+        <!-- Login Section -->
+        <div class="login-section">
+            <h3 class="text-center text-info mb-4">Login</h3>
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username" class="text-info">Username:</label>
+                    <input type="text" name="username" id="username" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="text-info">Password:</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-outline-info btn-block" value="Login">
+                </div>
+            </form>
+        </div>
+
+        <!-- Bill Payment Section -->
+        <div class="bill-section">
+            <i class="fas fa-file-invoice-dollar bill-icon"></i>
+            <h4 class="bill-title">Pay Your Bill</h4>
+            <p class="bill-description">Quick and secure way to pay your internet service bills</p>
+            <a href="{% url 'bill' %}" class="btn btn-bill">
+                Access Bill Portal
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Add FontAwesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+

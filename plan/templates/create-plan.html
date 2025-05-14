@@ -1,0 +1,45 @@
+{% extends 'main.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<style>
+.container {
+    background-color: #31363b;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.container label {
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+</style>
+
+<div class="container mt-4 pt-4 mb-4 px-4">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.plan_name|as_crispy_field }}
+        {{ form.description|as_crispy_field }}
+        {{ form.Duration|as_crispy_field }}
+        {{ form.cost|as_crispy_field }}
+        <div class="d-grid gap-2 d-md-block">
+            <button type="submit" class="btn btn-success btn-lg mb-4">Submit</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

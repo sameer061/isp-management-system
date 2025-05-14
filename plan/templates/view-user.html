@@ -1,0 +1,166 @@
+{% extends 'main.html' %}
+{% block content%}
+
+
+<style>
+body {
+  color: #ffffff
+}
+.user-profile .card {
+  border-radius: 10px;
+  background-color: #31363b;
+}
+.user-profile .card .card-header .profile_img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin: 5px auto;
+  border: 5px solid rgb(15, 14, 14);
+  border-radius: 50%;
+}
+.user-profile .card h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+.user-profile .card  {
+  font-size: 16px;
+  color: rgb(255, 255, 255);
+}
+.user-profile .table th,
+.user-profile .table td {
+    font-size: 14px;
+    padding: 5px 10px;
+    color: hsl(0, 0%, 100%);
+    background-color:#31363b;
+}
+@media (max-width: 767.98px) {
+  .user-profile .container {
+    padding: 0 5px !important;
+  }
+  .user-profile .card {
+    margin-bottom: 20px;
+  }
+  .user-profile .table {
+    font-size: 0.95rem;
+  }
+  .user-profile .card-header .profile_img {
+    width: 100px;
+    height: 100px;
+  }
+  .row > [class^='col-'] {
+    margin-bottom: 1rem;
+  }
+}
+</style>
+  <div class="user-profile py-4 ">
+    <div class="container">
+ 
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card shadow-sm">
+            <div class="card-header bg-transparent text-center">
+              {% if user.profile_image %}
+              <img src="{{user.profile_image.url}}" alt="" class="img-fluid profile_img" >
+              {% endif %}
+              <h3>{{user.first_name}} {{user.last_name}}</h3>
+            </div>
+            <div class="card-body">
+              <p class="mb-0"><strong class="pr-1">Username:</strong>{{user.user}}</p>
+    
+              <p class="mb-0"><strong class="pr-1">Firstname:</strong>{{user.first_name}} </p>
+
+              <p class="mb-0"><strong class="pr-1">Lastname:</strong>{{user.last_name}}</p>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="mb-0"><i class="far fa-clone pr-1"></i>General Information</h3>
+            </div>
+            <div class="card-body pt-0">
+              <table class="table table-bordered table-dark table-hover table-responsive">
+                {% if user.email %}
+                <tr>
+                  <th width="30%">Email</th>
+                  <td width="2%">:</td>
+                  <td>{{user.email}}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <th width="30%">Contact</th>
+                  <td width="2%">:</td>
+                  <td> {{user.phoneno}}</td>
+                </tr>
+                <tr>
+                  <th width="30%">Plan</th>
+                  <td width="2%">:</td>
+                  <td>{{user.current_plan}}</td>
+                </tr>
+                <tr>
+                  <th width="30%">Time</th>
+                  <td width="2%">:</td>
+                  <td>{{user.start_date}} to {{user.end_date}}</td>
+                </tr>
+                <tr>
+                  <th width="30%">Address</th>
+                  <td width="2%">:</td>
+                  <td>{{user.address}}</td>
+                </tr>
+                <tr>
+                  {% if user.id_proof %}
+                  <th width="40%">Id proof</th>
+                  <td width="3%">:</td>
+                  <td>
+                    <a href="{{user.id_proof.url}}" class="btn btn-outline-primary btn-sm" download>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                      </svg>
+                      Download
+                    </a>
+                    {% if user.id_proof.url|lower|slice:"-4:" == ".pdf" %}
+                      <a href="{% url 'inline_pdf' user.id_proof.name %}" target="_blank" class="btn btn-outline-info btn-sm ml-2">Preview PDF</a>
+                    {% elif user.id_proof.url|lower|slice:"-4:" == ".jpg" or user.id_proof.url|lower|slice:"-5:" == ".jpeg" or user.id_proof.url|lower|slice:"-4:" == ".png" %}
+                      <button type="button" class="btn btn-outline-info btn-sm ml-2" data-toggle="modal" data-target="#imagePreviewModal">Preview Image</button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="imagePreviewModal" tabindex="-1" role="dialog" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="imagePreviewModalLabel">Image Preview</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body text-center">
+                              <img src="{{user.id_proof.url}}" class="img-fluid" alt="ID Proof Image Preview">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </td>
+                  {% endif %}
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br><br>
+      <a href="/" class="btn btn-danger btn-lg ">Dashboard</a>
+
+
+      
+
+    </div>
+  </div>
+
+
+
+
+
+
+{% endblock %}

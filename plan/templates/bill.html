@@ -1,0 +1,222 @@
+{% extends "main.html" %}
+
+{% block content %}
+<style>
+    .page-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, #1a1e21, #212529);
+    }
+    @media (max-width: 576px) {
+        .payment-card {
+            width: 100% !important;
+            padding: 1.5rem !important;
+        }
+        .form-control, .btn, .razorpay-payment-button {
+            font-size: 1rem;
+        }
+        .payment-title {
+            font-size: 1.3rem;
+        }
+    }
+    .payment-card {
+        width: 450px;
+        margin: auto;
+        background-color: rgba(33, 37, 41, 0.95);
+        color: white;
+        box-shadow: 0 8px 32px rgba(23, 162, 184, 0.2);
+        transition: all 0.4s ease;
+        border: 1px solid rgba(23, 162, 184, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .payment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(23, 162, 184, 0.3);
+    }
+
+    .payment-header {
+        border-bottom: 2px solid rgba(23, 162, 184, 0.1);
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .payment-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        background: linear-gradient(45deg, #17a2b8, #20c997);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        background-color: rgba(52, 58, 64, 0.8);
+        border: 2px solid rgba(23, 162, 184, 0.2);
+        color: white;
+        padding: 1rem;
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        color: white !important;  /* Force white text color */
+    }
+
+    .form-control:focus {
+        background-color: rgba(52, 58, 64, 0.95);
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 0.25rem rgba(23, 162, 184, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);  /* Light grey placeholder text */
+    }
+
+    /* Style for number input spinners */
+    .form-control::-webkit-outer-spin-button,
+    .form-control::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    .form-control[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .form-label {
+        color: #17a2b8;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-outline-info {
+        background: linear-gradient(45deg, #17a2b8, #20c997);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        text-transform: uppercase;
+    }
+
+    .btn-outline-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+        opacity: 0.9;
+    }
+
+    .razorpay-payment-button {
+        width: 100%;
+        background: linear-gradient(45deg, #20c997, #17a2b8);
+        color: white;
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        margin-top: 1rem;
+    }
+
+    .razorpay-payment-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+        opacity: 0.9;
+    }
+</style>
+
+<div class="page-container">
+    <div class="card payment-card p-5">
+        <div class="payment-header">
+            <h3 class="text-center payment-title">Payment Portal</h3>
+        </div>
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-2 mb-4" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if payment and payment.paid %}
+                <div class="alert alert-success text-center">
+                    <h4 class="mb-3">Payment Successful!</h4>
+                    <p>Thank you for your payment of <strong>₹{{ payment.amount }}</strong>.</p>
+                    <p>A receipt has been sent to <strong>{{ payment.email }}</strong>.</p>
+                    <a href="mailto:{{ payment.email }}" class="btn btn-outline-info mt-2">Check your email for the receipt</a>
+                </div>
+            {% else %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %} 
+                   
+                    <div class="mb-4 form-group">
+                        <label for="customerName" class="form-label">
+                            <i class="fas fa-user text-info"></i> Customer Name
+                        </label>
+                        <input type="text" name="name" class="form-control" id="customerName" 
+                               placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="mb-4 form-group">
+                        <label for="customerEmail" class="form-label">
+                            <i class="fas fa-envelope text-info"></i> Email Address
+                        </label>
+                        <input type="email" name="email" class="form-control" id="customerEmail" 
+                               placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="mb-4 form-group">
+                        <label for="amount" class="form-label">
+                            <i class="fas fa-rupee-sign text-info"></i> Amount
+                        </label>
+                        <input type="number" name="amount" class="form-control" id="amount" 
+                               placeholder="Enter the amount" required>
+                    </div>
+                
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-outline-info btn-lg">
+                            <i class="fas fa-arrow-right"></i> Proceed to Pay
+                        </button>
+                    </div>
+                </form>
+
+                {% if payment %}
+                <form action="{% url 'success' %}" method="POST" class="mt-4">
+                    {% csrf_token %}
+                    <script
+                        src="https://checkout.razorpay.com/v1/checkout.js"
+                        data-key="rzp_test_1tK7yAY7ByvjWB"
+                        data-amount="{{ payment.amount }}"
+                        data-currency="INR"
+                        data-order_id="{{ payment.id }}"
+                        data-buttontext="Pay with Razorpay"
+                        data-name="ISP Billing Portal"
+                        data-description="Payment for {{ name }}"
+                        data-prefill.name="{{ name }}"
+                        data-theme.color="#17a2b8"
+                    ></script>
+                    <input type="hidden" name="payment_id" value="{{ payment.id }}">
+                </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Add FontAwesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock content %}

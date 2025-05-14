@@ -1,0 +1,86 @@
+{% extends 'main.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<style>
+.container {
+    background-color: #31363b;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.container label {
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+</style>
+
+<div class="container mt-4 pt-4 mb-4 px-4">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.user|as_crispy_field }}
+        {{ form.first_name|as_crispy_field }}
+        {{ form.last_name|as_crispy_field }}
+        {{ form.email|as_crispy_field }}
+        {{ form.address|as_crispy_field }}
+        {{ form.phoneno|as_crispy_field }}
+        {{ form.current_plan|as_crispy_field }}
+        {{ form.profile_image|as_crispy_field }}
+        <div data-toggle="tooltip" title="only upload image and pdf format">
+            {{ form.id_proof|as_crispy_field }}
+        </div>
+        {{ form.start_date|as_crispy_field }}
+        {{ form.end_date|as_crispy_field }}
+        <div class="d-grid gap-2 d-md-block">
+            <div class="form-group">
+                {{ form.is_active|as_crispy_field }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg mb-4 rounded">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+$("#id_start_date, #id_end_date").datepicker();
+
+$("#id_start_date").change(function () {
+    var startDate = document.getElementById("id_start_date").value;
+    var endDate = document.getElementById("id_end_date").value;
+    if ((Date.parse(endDate) <= Date.parse(startDate))) {
+        swal("Invalid Range", "Enter a valid start date", "warning");
+        document.getElementById("id_start_date").value = "";
+    }
+});
+
+$("#id_end_date").change(function () {
+    var startDate = document.getElementById("id_start_date").value;
+    var endDate = document.getElementById("id_end_date").value;
+    if ((Date.parse(endDate) <= Date.parse(startDate))) {
+        swal("Invalid Range", "Enter a valid end date", "warning");
+        document.getElementById("id_end_date").value = "";
+    }
+});
+</script>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
+
+{% endblock %}

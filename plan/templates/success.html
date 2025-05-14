@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <!-- Add FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes slideIn {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background: linear-gradient(135deg, #17a2b8, #138496);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            color: #17a2b8;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: checkmark 0.8s ease-in-out;
+        }
+
+        h1 {
+            color: #17a2b8;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            font-size: 16px;
+            color: #fff;
+            background: linear-gradient(45deg, #17a2b8, #138496);
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.2);
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(23, 162, 184, 0.3);
+        }
+
+        .payment-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+            animation: fadeIn 1.2s ease-in;
+        }
+
+        .payment-details p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .payment-details strong {
+            color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <i class="fas fa-check-circle success-icon"></i>
+        <h1>Payment Successful!</h1>
+        <p>Great! Your transaction has been completed successfully.</p>
+        
+        <div class="payment-details">
+            <p><strong>Amount:</strong> ₹{{ payment.amount }}</p>
+            <p><strong>Transaction ID:</strong> {{ payment.payment_id }}</p>
+            <p><strong>Date:</strong> {{ payment.created_at|date:"F d, Y" }}</p>
+        </div>
+
+        <p>A confirmation email has been sent to your registered email address.</p>
+        <a href="{% url 'dashboard' %}" class="button">
+            <i class="fas fa-home"></i> Back to Dashboard
+        </a>
+    </div>
+</body>
+</html>

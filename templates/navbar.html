@@ -1,0 +1,177 @@
+{% load static %}
+{% if request.user.is_authenticated %}
+<!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<!-- Hamburger Toggle Button for Mobile -->
+<button id="sidebarToggle" class="btn btn-dark d-lg-none" style="position:fixed;top:15px;left:15px;z-index:2000;">
+    <i class="bi bi-list" style="font-size: 1.5rem;"></i>
+</button>
+<style>
+/* Sidebar styles */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px;
+    background: #212529;
+    color: #fff;
+    padding-top: 30px;
+    z-index: 1030;
+    transition: width 0.3s, left 0.3s;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+}
+#sidebar .sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 0 20px 20px 20px;
+    border-bottom: 1px solid #343a40;
+    margin-bottom: 20px;
+}
+#sidebar .sidebar-header i {
+    margin-right: 10px;
+}
+#sidebar .nav-link {
+    color: #adb5bd;
+    padding: 12px 24px;
+    font-size: 1.05em;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+#sidebar .nav-link.active,
+#sidebar .nav-link:hover {
+    background: #343a40;
+    color: #fff;
+    text-decoration: none;
+}
+#sidebar .logout-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 24px;
+    right: 24px;
+    width: calc(100% - 48px);
+}
+@media (max-width: 991.98px) {
+    #sidebar {
+        left: -220px;
+        width: 220px;
+        padding-top: 15px;
+        transition: left 0.3s;
+    }
+    #sidebar.active {
+        left: 0;
+    }
+    #sidebar .sidebar-header span,
+    #sidebar .nav-link span,
+    #sidebar .logout-btn span {
+        display: none;
+    }
+    #sidebar .sidebar-header,
+    #sidebar .nav-link,
+    #sidebar .logout-btn {
+        justify-content: center;
+        text-align: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    body.sidebar-open {
+        overflow: hidden;
+    }
+    #sidebar-backdrop {
+        display: block;
+    }
+}
+#sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1029;
+}
+body {
+    margin-left: 220px;
+    transition: margin-left 0.3s;
+}
+@media (max-width: 991.98px) {
+    body {
+        margin-left: 60px;
+    }
+}
+</style>
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <i class="bi bi-speedometer2" style="font-size:1.7em;"></i>
+        <span style="font-size:1.3em;font-weight:600;">Dashboard</span>
+    </div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+                <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'plans' %}active{% endif %}" href="{% url 'plans' %}">
+                <i class="bi bi-list-task"></i> <span>Plans</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'users' %}active{% endif %}" href="{% url 'users' %}">
+                <i class="bi bi-people"></i> <span>Clients</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'createplan' %}active{% endif %}" href="{% url 'createplan' %}">
+                <i class="bi bi-plus-circle"></i> <span>Create Plan</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'createuser' %}active{% endif %}" href="{% url 'createuser' %}">
+                <i class="bi bi-person-plus"></i> <span>Create Client</span>
+            </a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link" href="/admin/plan/userprofile/export/?">
+                <i class="bi bi-file-earmark-arrow-up"></i> <span>Export Data</span>
+            </a>
+        </li> -->
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'reports' %}">
+                <i class="bi bi-file-earmark-bar-graph"></i> <span>reports</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}" href="{% url 'analytics' %}">
+                <i class="bi bi-bar-chart"></i> <span>Analytics</span>
+            </a>
+        </li>
+    </ul>
+    <div class="logout-btn">
+        <a class="btn btn-outline-danger btn-block" href="{% url 'logout' %}">
+            <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+        </a>
+    </div>
+</nav>
+<!-- Sidebar Backdrop for Mobile -->
+<div id="sidebar-backdrop"></div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var sidebar = document.getElementById('sidebar');
+    var backdrop = document.getElementById('sidebar-backdrop');
+    var toggle = document.getElementById('sidebarToggle');
+    if (toggle) {
+        toggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            document.body.classList.toggle('sidebar-open');
+            backdrop.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+        });
+    }
+    if (backdrop) {
+        backdrop.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            backdrop.style.display = 'none';
+        });
+    }
+});
+</script>
+{% endif %}
