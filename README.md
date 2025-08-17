@@ -11,6 +11,31 @@ A comprehensive Django-based Internet Service Provider (ISP) management system f
 - **Admin Interface**: Beautiful admin panel with Jazzmin theme
 - **Responsive Design**: Modern UI with Bootstrap 5
 
+## 📸 Screenshots
+
+*Screenshots are being added to showcase the application interface. Check the [screenshots directory](screenshots/) for visual examples of each page.*
+
+### 🔐 Authentication
+- **Login Interface** - Secure user authentication
+- **User Management** - Comprehensive customer database
+
+### 🏠 Main Application
+- **Dashboard** - Business overview and navigation
+- **User Management** - Customer account administration
+- **Plan Configuration** - ISP service plan setup
+
+### 💰 Billing & Payments
+- **Billing Interface** - Customer invoice management
+- **Payment Processing** - Secure transaction handling
+
+### 📊 Analytics & Reports
+- **Business Intelligence** - Data visualization and insights
+- **Report Generation** - Custom business reports
+
+### 🔧 Administration
+- **Admin Panel** - Beautiful Jazzmin-themed interface
+- **System Management** - Complete application control
+
 ## 🛠️ Technology Stack
 
 - **Backend**: Django 4.2.20
