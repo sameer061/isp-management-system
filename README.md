@@ -13,28 +13,54 @@ A comprehensive Django-based Internet Service Provider (ISP) management system f
 
 ## 📸 Screenshots
 
-*Screenshots are being added to showcase the application interface. Check the [screenshots directory](screenshots/) for visual examples of each page.*
+Here are some screenshots of the application in action.
 
 ### 🔐 Authentication
-- **Login Interface** - Secure user authentication
-- **User Management** - Comprehensive customer database
+
+**Login Interface**
+![Login Page](screenshots/authentication/login.png)
 
 ### 🏠 Main Application
-- **Dashboard** - Business overview and navigation
-- **User Management** - Customer account administration
-- **Plan Configuration** - ISP service plan setup
 
-### 💰 Billing & Payments
-- **Billing Interface** - Customer invoice management
-- **Payment Processing** - Secure transaction handling
+**Dashboard**
+![Dashboard](screenshots/main/dashboard.png)
 
-### 📊 Analytics & Reports
-- **Business Intelligence** - Data visualization and insights
-- **Report Generation** - Custom business reports
+**Users List**
+![Users List](screenshots/main/users-list.png)
+
+**Create User**
+![Create User](screenshots/main/create-user.png)
+
+### 💰 Plan Management
+
+**Plans List**
+![Plans List](screenshots/plans/plans-list.png)
+
+**Create Plan**
+![Create Plan](screenshots/plans/create-plan.png)
+
+### 📊 Billing & Payments
+
+**Billing Page**
+![Billing Page](screenshots/billing/billing.png)
+
+### 📈 Analytics & Reports
+
+**Reports Page**
+![Reports Page](screenshots/analytics/reports.png)
+
+**Analytics Page**
+![Analytics Page](screenshots/analytics/analytics.png)
+
+### 📧 Communication
+
+**Email Page**
+![Email Page](screenshots/communication/email.png)
 
 ### 🔧 Administration
-- **Admin Panel** - Beautiful Jazzmin-themed interface
-- **System Management** - Complete application control
+
+**Admin Panel**
+![Admin Panel](screenshots/admin/admin-panel.png)
 
 ## 🛠️ Technology Stack
 
