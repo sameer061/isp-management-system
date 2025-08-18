@@ -188,23 +188,6 @@ DATABASES = {
 4. Add URLs in `plan/urls.py`
 5. Create templates in `plan/templates/`
 
-## 🚀 Deployment
-
-### Production Checklist
-- [ ] Set `DEBUG = False`
-- [ ] Configure production database
-- [ ] Set up static file serving
-- [ ] Configure email settings
-- [ ] Set secure `SECRET_KEY`
-- [ ] Use HTTPS
-- [ ] Set up logging
-
-### Deployment Options
-- **Heroku**: Add `gunicorn` to requirements
-- **AWS**: Use Elastic Beanstalk or EC2
-- **DigitalOcean**: Deploy on App Platform
-- **VPS**: Manual deployment with nginx + gunicorn
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -217,22 +200,4 @@ DATABASES = {
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
 
-If you encounter any issues or have questions:
-
-1. Check the [Issues](https://github.com/yourusername/isp/issues) page
-2. Create a new issue with detailed information
-3. Contact the development team
-
-## 🔄 Updates
-
-Stay updated with the latest features and bug fixes by:
-
-1. Pulling the latest changes: `git pull origin main`
-2. Updating dependencies: `pip install -r requirements.txt`
-3. Running migrations: `python manage.py migrate`
-
----
-
-**Built with ❤️ using Django**
