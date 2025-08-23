@@ -30,6 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.app",
+    "https://isp-management-system.onrender.com",
 ]
 
 # Application definition
