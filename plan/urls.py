@@ -20,6 +20,6 @@ urlpatterns = [
     path('reports/', views.reports, name="reports"),
     path('generate-report/', views.generate_report, name="generate_report"),
     path('analytics/', views.analytics, name='analytics'),
-    path('<int:pk>/', views.update_plan, name="updateplan"),
+    path('plan/<int:pk>/', views.update_plan, name="updateplan"),
     path('<str:pk>/', views.edit_user, name="updateuser"),
 ]
